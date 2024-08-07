@@ -65,21 +65,42 @@ def post(post_id):
     post = Post.query.get_or_404(post_id)
     return render_template('post.html', post=post)
 
+# Add to app.py
+
 @app.route('/create_post', methods=['GET', 'POST'])
 @login_required
 def create_post():
-    #todo
-    pass
+    if request.method == 'POST':
+        title = request.form.get('title')
+        content = request.form.get('content')
+        new_post = Post(title=title, content=content)
+        db.session.add(new_post)
+        db.session.commit()
+        return redirect(url_for('index'))
+    return render_template('create_post.html')
 
 @app.route('/edit_post/<int:post_id>', methods=['GET', 'POST'])
 @login_required
 def edit_post(post_id):
-    #todo
-    pass
+    post = Post.query.get_or_404(post_id)
+    if request.method == 'POST':
+        post.title = request.form.get('title')
+        post.content = request.form.get('content')
+        db.session.commit()
+        return redirect(url_for('post', post_id=post_id))
+    return render_template('edit_post.html', post=post)
 
 @app.route('/delete_post/<int:post_id>')
 @login_required
 def delete_post(post_id):
+    post = Post.query.get_or_404(post_id)
+    db.session.delete(post)
+    db.session.commit()
+    return redirect(url_for('index'))
+
+@app.route('/edit_post/<int:post_id>', methods=['GET', 'POST'])
+@login_required
+def edit_post(post_id):
     #todo
     pass
 
