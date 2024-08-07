@@ -65,8 +65,6 @@ def post(post_id):
     post = Post.query.get_or_404(post_id)
     return render_template('post.html', post=post)
 
-# Add to app.py
-
 @app.route('/create_post', methods=['GET', 'POST'])
 @login_required
 def create_post():
@@ -97,12 +95,6 @@ def delete_post(post_id):
     db.session.delete(post)
     db.session.commit()
     return redirect(url_for('index'))
-
-@app.route('/edit_post/<int:post_id>', methods=['GET', 'POST'])
-@login_required
-def edit_post(post_id):
-    #todo
-    pass
 
 if __name__ == '__main__':
     db.create_all()
